@@ -95,7 +95,7 @@ target_include_directories(qpOASES
 #Fetch and build blockSQP
 FetchContent_Declare(
 	bsqp
-	GIT_REPOSITORY	https://github.com/djanka2/blockSQP
+	GIT_REPOSITORY	https://github.com/ReWittmann/original_blockSQP
 	GIT_TAG			da05d3957b93bd55b9a7f08c859d302851056a6d
 	SOURCE_SUBDIR 	DIR/THAT/DOESNT/EXIST
 	PATCH_COMMAND	git apply ${CMAKE_CURRENT_SOURCE_DIR}/blockSQP_fix_doublefree_oobwrite.patch

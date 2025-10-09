@@ -20,3 +20,8 @@ Invoke CMake on the CMakeLists.txt, e.g. navigate to the folder and use the comm
 If you wish to select a specific python installation to build for, use  
 &nbsp;&nbsp; cmake -B .build -DPYTHON_INTERPRETER=PATH/TO/PYTHON/EXECUTABLE
 
+To test the solver, run  
+&nbsp;&nbsp; python run_old_blockSQP.py  
+
+Edit run_old_blockSQP.py to select different examples and options.  
+
