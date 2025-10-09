@@ -1,0 +1,33 @@
+diff --git a/src/blocksqp_glob.cpp b/src/blocksqp_glob.cpp
+index b2eb7a7..9f75718 100644
+--- a/src/blocksqp_glob.cpp
++++ b/src/blocksqp_glob.cpp
+@@ -472,10 +472,10 @@ int SQPmethod::feasibilityRestorationPhase()
+         for( k=prob->nVar; k<prob->nVar+prob->nCon; k++ )
+         {
+             // skip the dual variables for the slack variables in the restoration problem
+-            if( (lStpNorm = fabs( restMethod->vars->lambda( 2*prob->nCon + k ) - vars->lambda( k ) )) > vars->lambdaStepNorm )
++            if( (lStpNorm = fabs( restMethod->vars->lambda( prob->nCon + k ) - vars->lambda( k ) )) > vars->lambdaStepNorm )
+                 vars->lambdaStepNorm = lStpNorm;
+-            vars->lambda( k ) = restMethod->vars->lambda( 2*prob->nCon + k );
+-            vars->lambdaQP( k ) = restMethod->vars->lambdaQP( 2*prob->nCon + k );
++            vars->lambda( k ) = restMethod->vars->lambda( prob->nCon + k );
++            vars->lambdaQP( k ) = restMethod->vars->lambdaQP( prob->nCon + k );
+         }
+         vars->alpha = 1.0;
+         vars->nSOCS = 0;
+diff --git a/src/blocksqp_matrix.cpp b/src/blocksqp_matrix.cpp
+index 7fb2766..084955e 100644
+--- a/src/blocksqp_matrix.cpp
++++ b/src/blocksqp_matrix.cpp
+@@ -587,10 +587,6 @@ SymMatrix::SymMatrix( const SymMatrix &A )
+ 
+ SymMatrix::~SymMatrix( void )
+ {
+-    Dcount++;
+-
+-    if( !tflag )
+-        free();
+ }
+ 
+ 
