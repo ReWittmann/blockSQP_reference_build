@@ -19,8 +19,9 @@ import localcopy_OCProblems as OCProblems
 #  'Fullers', 'Electric_Car', 'F8_Aircraft', 'Gravity_Turn', 'Oil_Shale_Pyrolysis', 
 #  'Particle_Steering', 'Quadrotor_Helicopter', 'Supermarket_Refrigeration', 
 #  'Three_Tank_Multimode', 'Time_Optimal_Car', 'Van_der_Pol_Oscillator', 
-#  'Van_der_Pol_Oscillator_2', 'Van_der_Pol_Oscillator_3',
-#  'Lotka_OED', 'Fermenter', 'Batch_Distillation', 'Hang_Glider', 'Cart_Pendulum']
+#  'Van_der_Pol_Oscillator_2', 'Van_der_Pol_Oscillator_3', 'Lotka_OED', 
+#  'Fermenter', 'Batch_Distillation', 'Hang_Glider', 'Cart_Pendulum'
+#  ]
 
 OCprob = OCProblems.Lotka_Volterra_Fishing(
                     nt = 100,           #number of shooting intervals
@@ -43,7 +44,7 @@ opts.maxTimeQP = 10.0
 opts.maxConvQP = 1                      #number of additional QPs per SQP iteration, includes fallback BFGS
 opts.convStrategy = 0                   #convexification strategy, only 0: convex combinations is available
 
-opts.whichSecondDerv = 0                #2: broken in this version
+opts.whichSecondDerv = 0                #2: broken in this version of blockSQP
 opts.hessUpdate = 1                     #1: SR1, 2: damped BFGS
 opts.hessScaling = 2                    #2: Oren-Luenberger, 4: Selective COL sizing 
 opts.fallbackUpdate = 2                 # ''    ''    ''    ''

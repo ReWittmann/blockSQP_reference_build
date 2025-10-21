@@ -9,7 +9,7 @@ endif()
 project(original_blockSQP_interface    
 	DESCRIPTION "Build system for blockSQP "
 	HOMEPAGE_URL https://github.com/djanka2/blockSQP
-    	LANGUAGES CXX C Fortran
+    LANGUAGES CXX C Fortran
 )
 set(CMAKE_CXX_STANDARD 11)
 #enable_language(Fortran)
@@ -46,7 +46,6 @@ set(BUILD_SHARED_LIBS OFF)
 FetchContent_MakeAvailable(CMAKEMUMPS)
 
 #Dependency: qpOASES. Apply patch to fix MUMPS interface
-#set(qpos_patch git apply ${CMAKE_CURRENT_SOURCE_DIR}/qpOASES_fix_MUMPS.patch)
 FetchContent_Declare(
 	qpos
 	GIT_REPOSITORY	https://github.com/coin-or/qpOASES.git
@@ -95,7 +94,7 @@ target_include_directories(qpOASES
 #Fetch and build blockSQP
 FetchContent_Declare(
 	bsqp
-	GIT_REPOSITORY	https://github.com/ReWittmann/original_blockSQP
+	GIT_REPOSITORY	https://github.com/ReWittmann/blockSQP_reference
 	GIT_TAG			da05d3957b93bd55b9a7f08c859d302851056a6d
 	SOURCE_SUBDIR 	DIR/THAT/DOESNT/EXIST
 	PATCH_COMMAND	git apply ${CMAKE_CURRENT_SOURCE_DIR}/blockSQP_fix_doublefree_oobwrite.patch

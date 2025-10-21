@@ -9,6 +9,7 @@ Copyright (c) 2025- Reinhold Wittmann <reinhold.wittmann@ovgu.de>
 3. Git
 4. A fortran compiler, e.g. gfortran
 5. A C++ 11 compiler, e.g. g++-14
+6. Python, this version was tested for python 3.13
 
 ##Building
 Invoke CMake on the CMakeLists.txt, e.g. navigate to the folder and use the commands  
