@@ -26,7 +26,7 @@ If you wish to select a specific Python installation to build for, use
 e.g. ... =/home/SomeOne/.localpython/bin/python3.13
 
 ##Python package requirements
-Runnig the scripts requires numpy, casadi and matplotlib. The project was tested for version 2.3.2, 3.7.1 and 3.10.5 respectively.
+Running the scripts requires numpy, casadi and matplotlib. The project was tested for version 2.3.2, 3.7.1 and 3.10.5 respectively.
 
 To test the solver, run  
 &nbsp;&nbsp; python run_old_blockSQP.py  
