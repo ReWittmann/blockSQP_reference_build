@@ -1,3 +1,20 @@
+/*
+ * blockSQP_reference_build - build system and Python interface for blockSQP
+ * Copyright (C) 2025 by Reinhold Wittmann <reinhold.wittmann@ovgu.de>
+ *
+ * Licensed under the zlib license. See LICENSE for more details.
+ */
+
+/**
+ * \file py_blockSQP.cpp
+ * \author Reinhold Wittmann
+ * \date 2022-2025
+ *
+ * Implementation of a python interface to the blockSQP 
+ * nonlinear programming solver - C++ side part
+ */
+
+
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 #include <pybind11/numpy.h>

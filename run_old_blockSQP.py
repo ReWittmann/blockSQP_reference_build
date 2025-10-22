@@ -1,3 +1,7 @@
+# blockSQP_reference_build - build system and Python interface for blockSQP
+# Copyright (C) 2025 by Reinhold Wittmann <reinhold.wittmann@ovgu.de>
+# Licensed under the zlib license. See LICENSE for more details.
+
 import numpy as np
 import os
 import sys
@@ -9,19 +13,7 @@ except:
 sys.path += [cD]
 
 import py_blockSQP_old as py_blockSQP
-
 import localcopy_OCProblems as OCProblems
-#Available problems:
-# ['Lotka_Volterra_Fishing', 'Lotka_Volterra_multimode', 'Goddard_Rocket', 
-#  'Calcium_Oscillation', 'Batch_Reactor', 'Bioreactor', 'Hanging_Chain', 
-#  'Hanging_Chain_NQ', 'Catalyst_Mixing', 'Cushioned_Oscillation', 
-#  'D_Onofrio_Chemotherapy', 'D_Onofrio_Chemotherapy_VT', 'Egerstedt_Standard', 
-#  'Fullers', 'Electric_Car', 'F8_Aircraft', 'Gravity_Turn', 'Oil_Shale_Pyrolysis', 
-#  'Particle_Steering', 'Quadrotor_Helicopter', 'Supermarket_Refrigeration', 
-#  'Three_Tank_Multimode', 'Time_Optimal_Car', 'Van_der_Pol_Oscillator', 
-#  'Van_der_Pol_Oscillator_2', 'Van_der_Pol_Oscillator_3', 'Lotka_OED', 
-#  'Fermenter', 'Batch_Distillation', 'Hang_Glider', 'Cart_Pendulum'
-#  ]
 
 OCprob = OCProblems.Lotka_Volterra_Fishing(
                     nt = 100,           #number of shooting intervals

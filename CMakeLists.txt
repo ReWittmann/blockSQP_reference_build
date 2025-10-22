@@ -1,19 +1,17 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.20)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   message(FATAL_ERROR "Please use out of source build:
-  cmake -B build
-  {make -C build } OR {cmake --build build}")
+  cmake -B .build [OPTIONS]
+  cmake --build .build")
 endif()
 
-project(original_blockSQP_interface    
-	DESCRIPTION "Build system for blockSQP "
-	HOMEPAGE_URL https://github.com/djanka2/blockSQP
+project(blockSQP_reference_build
+	DESCRIPTION "Build system for blockSQP <https://github.com/ReWittmann/blockSQP_reference>"
+	HOMEPAGE_URL https://github.com/ReWittmann/blockSQP_reference_build
     LANGUAGES CXX C Fortran
 )
 set(CMAKE_CXX_STANDARD 11)
-#enable_language(Fortran)
-
 
 #Dependencies: LAPACK, BLAS
 find_package(BLAS REQUIRED)
@@ -29,18 +27,18 @@ set(LAPACK_LIBRARY ${LAPACK_LIBRARIES})
 
 include(FetchContent)
 
-#Dependency: MUMPS sparse linear solver
+#Dependency: MUMPS sparse linear solver, fetch via CMakeMumps build system from scivision
 FetchContent_Declare(
 	CMAKEMUMPS
 	GIT_REPOSITORY https://github.com/scivision/mumps.git
-	GIT_TAG 5b153379cdd1b0d2a33daf88bffab16a22ff0004
+	GIT_TAG 5b153379cdd1b0d2a33daf88bffab16a22ff0004		#feel free to switch to a newer version
 )
 set(MUMPS_parallel OFF)
 set(MUMPS_scalapack OFF)
 set(BUILD_SINGLE OFF)
 set(MUMPS_find_static OFF)
 set(MUMPS_intsize64 OFF) #must be off
-set(CMAKE_Fortran_FLAGS ${CMAKE_Fortran_FLAGS} -Os) #Likely to be loaded several times with dlmopen + no noticeable performance difference compared to -O3
+set(CMAKE_Fortran_FLAGS ${CMAKE_Fortran_FLAGS} -Os)
 set(BUILD_SHARED_LIBS OFF)
 
 FetchContent_MakeAvailable(CMAKEMUMPS)
@@ -97,7 +95,7 @@ FetchContent_Declare(
 	GIT_REPOSITORY	https://github.com/ReWittmann/blockSQP_reference
 	GIT_TAG			da05d3957b93bd55b9a7f08c859d302851056a6d
 	SOURCE_SUBDIR 	DIR/THAT/DOESNT/EXIST
-	PATCH_COMMAND	git apply ${CMAKE_CURRENT_SOURCE_DIR}/blockSQP_fix_doublefree_oobwrite.patch
+	PATCH_COMMAND	git apply ${CMAKE_CURRENT_SOURCE_DIR}/blockSQP_fix_doublefree_oobread.patch
 	UPDATE_DISCONNECTED 1
 )
 FetchContent_MakeAvailable(bsqp)
@@ -128,6 +126,7 @@ set_target_properties(blockSQP PROPERTIES
 target_include_directories(blockSQP PUBLIC ${bsqp_SOURCE_DIR}/include)
 target_link_libraries(blockSQP PUBLIC qpOASES)
 
+
 #Build blockSQP example
 add_executable(example1 ${bsqp_SOURCE_DIR}/examples/example1.cpp)
 target_compile_options(example1 PRIVATE -O3)
@@ -147,12 +146,11 @@ endif()
 FetchContent_Declare(
 	PYBIND11
 	GIT_REPOSITORY https://github.com/pybind/pybind11.git
-	GIT_TAG a2e59f0e7065404b44dfe92a28aca47ba1378dc4	#2.13.6
+	GIT_TAG a2e59f0e7065404b44dfe92a28aca47ba1378dc4	#feel free to switch to a newer version
 )
 FetchContent_MakeAvailable(PYBIND11)
 
-pybind11_add_module(py_blockSQP ${CMAKE_CURRENT_SOURCE_DIR}/py_blockSQP.cpp)
-#target_include_directories(py_blockSQP PUBLIC ${bsqp_SOURCE_DIR}/include)	
+pybind11_add_module(py_blockSQP ${CMAKE_CURRENT_SOURCE_DIR}/py_blockSQP.cpp)	
 
 if(UNIX)
 	target_compile_options(py_blockSQP PRIVATE 

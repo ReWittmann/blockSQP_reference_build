@@ -1,5 +1,8 @@
+# blockSQP_reference_build - build system and Python interface for blockSQP
+# Copyright (C) 2025 by Reinhold Wittmann <reinhold.wittmann@ovgu.de>
+# Licensed under the zlib license. See LICENSE for more details.
+
 import numpy as np
-# import py_blockSQP
 from . import py_blockSQP
 import typing
 
@@ -23,7 +26,7 @@ class BlockSQP_Problem(py_blockSQP.Problemform):
     def jac_g(xi):
         return None
     def jac_g_nz(xi):
-    	return None
+        	return None
     
     class Data:
         objval : float
