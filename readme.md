@@ -30,7 +30,6 @@ Running the scripts requires numpy, casadi and matplotlib. The project was teste
 
 To test the solver, run  
 &nbsp;&nbsp; python run_old_blockSQP.py  
-LaTeX may be needed to plot iterates and solutions.
 
 Edit run_old_blockSQP.py to select different examples and options. 
 
