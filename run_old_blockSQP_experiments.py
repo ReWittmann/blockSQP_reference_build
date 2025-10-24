@@ -7,6 +7,11 @@ import datetime
 import py_blockSQP_old
 import OCP_experiment_old
 import localcopy_OCProblems as OCProblems
+from pathlib import Path
+try:
+    cD = Path(__file__).parent
+except:
+    cD = Path.cwd()
 
 Examples = [
             OCProblems.Batch_Reactor,
@@ -43,30 +48,25 @@ Experiments = [
 
 
 file_output = True
-plot_folder = cD + "/out_old_blockSQP_experiments_RK4"
+plot_folder = cD / Path("out_old_blockSQP_experiments_RK4")
 integrator = 'RK4'
 
 
 nPert0 = 0
 nPertF = 40
 dirPath = plot_folder
-if not os.path.exists(dirPath):
-    os.makedirs(dirPath)
+dirPath.mkdir(parents = True, exist_ok = True)
 if file_output:
     date_app = str(datetime.datetime.now()).replace(" ", "_").replace(":", "_").replace(".", "_").replace("'", "")
-    sep = "" if dirPath[-1] == "/" else "/"
     pref = "blockSQP"
-    filePath = dirPath + sep + pref + "_it_" + date_app + ".txt"
+    filePath = dirPath / Path(pref + "_it_" + date_app + ".txt")
     out = open(filePath, 'w')
 else:
     out = OCP_experiment_old.out_dummy()
 titles = [EXP_name for _, EXP_name in Experiments]
 OCP_experiment_old.print_heading(out, titles)
 
-for OCclass in Examples:
-    # if OCclass in (OCProblems.Hang_Glider, OCProblems.Batch_Reactor, OCProblems.Cart_Pendulum) and integrator == 'collocation':
-    #     continue
-    
+for OCclass in Examples:    
     OCprob = OCclass(nt = 100, integrator = integrator, parallel = True)
     itMax = 200
     titles = []
