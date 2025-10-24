@@ -3,15 +3,7 @@
 # Licensed under the zlib license. See LICENSE for more details.
 
 import numpy as np
-import os
-import sys
 import time
-try:
-    cD = os.path.dirname(os.path.abspath(__file__))
-except:
-    cD = os.getcwd()
-sys.path += [cD]
-
 import py_blockSQP_old as py_blockSQP
 import localcopy_OCProblems as OCProblems
 

@@ -2,13 +2,6 @@
 # Copyright (C) 2025 by Reinhold Wittmann <reinhold.wittmann@ovgu.de>
 # Licensed under the zlib license. See LICENSE for more details.
 
-import os
-import sys
-try:
-    cD = os.path.dirname(os.path.abspath(__file__))
-except:
-    cD = os.getcwd()
-sys.path += [cD, cD + "/..", cD + "/../examples"]
 
 import localcopy_OCProblems as OCProblems
 import py_blockSQP_old

@@ -1,11 +1,4 @@
 #Python version of blockSQP example1.cpp (sparse variant)
-import os
-import sys
-try:
-    cD = os.path.dirname(os.path.abspath(__file__))
-except:
-    cD = os.getcwd()
-sys.path += [cD]
 import py_blockSQP_old as py_blockSQP
 import numpy as np
 import time

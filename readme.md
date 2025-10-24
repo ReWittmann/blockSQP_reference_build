@@ -4,7 +4,7 @@ This project contains CMake build specifications, patches, a Python interface an
 Copyright (c) 2025 Reinhold Wittmann <reinhold.wittmann@ovgu.de>  
 Licensed under the zlib license. See LICENSE for more details.
 
-This project downloads MUMPS <https://mumps-solver.org/index.php?page=home> (CeCILL-C license), MUMPS-CMake build system <https://github.com/scivision/mumps> (MIT license), qpOASES <https://github.com/coin-or/qpOASES> (LGPL v2.1 license), <https://github.com/ReWittmann/blockSQP_reference> (zlib license) and <https://github.com/pybind/pybind11> (custom license). Each license applies to the respective package, and any statement in it regarding compiled code applies to binary files produced by this build system that include that compiled code.
+This project downloads MUMPS <https://mumps-solver.org/index.php?page=home> (CeCILL-C license), MUMPS-CMake build system <https://github.com/scivision/mumps> (MIT license), qpOASES <https://github.com/coin-or/qpOASES> (LGPL v2.1 license), <https://github.com/ReWittmann/blockSQP_reference> (zlib license) and pybind11 <https://github.com/pybind/pybind11> (custom license). Each license applies to the respective package, and any statement in it regarding compiled code applies to binary files produced by this build system that include that compiled code.
 
 ##Build requirements
 1. Linux

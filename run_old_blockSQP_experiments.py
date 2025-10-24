@@ -2,16 +2,8 @@
 # Copyright (C) 2025 by Reinhold Wittmann <reinhold.wittmann@ovgu.de>
 # Licensed under the zlib license. See LICENSE for more details.
 
-import os
-import sys
+
 import datetime
-
-try:
-    cD = os.path.dirname(os.path.abspath(__file__))
-except:
-    cD = os.getcwd()
-sys.path += [cD + "/..", cD + "/../.."]
-
 import py_blockSQP_old
 import OCP_experiment_old
 import localcopy_OCProblems as OCProblems
