@@ -1,5 +1,5 @@
 blockSQP_reference_build - build system and Python interface for the nonlinear programming solver blockSQP by Dennis Janka <dennis.janka@iwr.uni-heidelberg.de>.
-Copyright (c) 2022-2025 Reinhold Wittmann <reinhold.wittmann@ovgu.de>
+Copyright (c) 2025 Reinhold Wittmann <reinhold.wittmann@ovgu.de>
 
 (zlib license):
 
