@@ -1,5 +1,5 @@
 # blockSQP_reference_build - build system and Python interface for blockSQP
-# Copyright (C) 2025 by Reinhold Wittmann <reinhold.wittmann@ovgu.de>
+# Copyright (C) 2025-2026 by Reinhold Wittmann <reinhold.wittmann@ovgu.de>
 # Licensed under the zlib license. See LICENSE for more details.
 
 
@@ -13,47 +13,68 @@ try:
 except:
     cD = Path.cwd()
 
+
 Examples = [
-            OCProblems.Batch_Reactor,
-            OCProblems.Cart_Pendulum,
-            OCProblems.Catalyst_Mixing,
-            OCProblems.Cushioned_Oscillation,
-            OCProblems.Egerstedt_Standard,
-            OCProblems.Electric_Car,
-            OCProblems.Goddard_Rocket,
-            OCProblems.Hang_Glider,
-            OCProblems.Hanging_Chain,
-            OCProblems.Lotka_Volterra_Fishing,
-            OCProblems.Particle_Steering,
-            OCProblems.Quadrotor_Helicopter,
-            OCProblems.Three_Tank_Multimode,
-            OCProblems.Time_Optimal_Car,
-            OCProblems.Tubular_Reactor,
-            OCProblems.Lotka_OED,
+            # (OCProblems.Apollo_Reentry, dict(), None),            #Doesnt work
+            
+            # (OCProblems.Batch_Distillation, dict(), None),
+            (OCProblems.Batch_Reactor, dict(), None),
+            # (OCProblems.Batch_Reactor_OED, dict(), None),
+            # (OCProblems.Calcium_Oscillation, dict(), None),
+            # (OCProblems.Cart_Pendulum, dict(), None),
+            # (OCProblems.Cart_Pendulum, OCProblems.Cart_Pendulum.param_set_2, "Cart_Pendulum_2"),
+            # (OCProblems.Catalyst_Mixing, dict(), None),
+            # (OCProblems.Catalyst_Mixing_OED, dict(), None),
+            # (OCProblems.Cushioned_Oscillation, dict(), None),
+            # (OCProblems.Dielectrophoretic_Particle, dict(), None),
+            # (OCProblems.D_Onofrio_Chemotherapy, dict(), "D_Onofrio_Chemotherapy"),
+            # (OCProblems.D_Onofrio_Chemotherapy, OCProblems.D_Onofrio_Chemotherapy.param_set_2, "D_Onofrio_Chemotherapy_2"),
+            # (OCProblems.D_Onofrio_Chemotherapy, OCProblems.D_Onofrio_Chemotherapy.param_set_3, "D_Onofrio_Chemotherapy_3"),
+            # (OCProblems.D_Onofrio_Chemotherapy, OCProblems.D_Onofrio_Chemotherapy.param_set_4, "D_Onofrio_Chemotherapy_4"),
+            # (OCProblems.Ducted_Fan, dict(), None),
+            # (OCProblems.Egerstedt_Standard, dict(), None),
+            # (OCProblems.Electric_Car, dict(), None),
+            # (OCProblems.Fermenter, dict(), None),
+            # (OCProblems.Goddard_Rocket, dict(), None),
+            # (OCProblems.Hang_Glider, dict(), None),
+            # (OCProblems.Hanging_Chain, dict(), None),
+            # (OCProblems.Lotka_Volterra_Fishing, dict(), None),
+            # (OCProblems.Lotka_OED, dict(), None),
+            # (OCProblems.Lotka_Volterra_Competitive, dict(), None),
+            # (OCProblems.Lotka_Volterra_Competitive, OCProblems.Lotka_Volterra_Competitive.param_set_2, "Lotka_Volterra_Competitive_2"),
+            # (OCProblems.Lotka_Volterra_Shared, dict(), None),
+            # (OCProblems.Lotka_Volterra_Shared, OCProblems.Lotka_Volterra_Shared.param_set_2, "Lotka_Volterra_Shared_2"),
+            
+            # (OCProblems.Lotka_Shared_OED, dict(), None),          #Doesnt work
+            
+            # (OCProblems.Ocean, dict(), None),
+            # (OCProblems.Particle_Steering, dict(), None),
+            # (OCProblems.Quadrotor_Helicopter, dict(), None),
+            # (OCProblems.Satellite_Deorbiting, dict(), None),
+            # (OCProblems.Three_Tank_Multimode, dict(), None),
+            # (OCProblems.Time_Optimal_Car, dict(), None),
+            # (OCProblems.Tubular_Reactor, dict(), None),
             ]
-OCProblems.Goddard_Rocket.__name__ = 'Goddard\'s Rocket'
 
 opt_SR1_BFGS = py_blockSQP_old.SQPoptions()
 opt_SR1_BFGS.maxTimeQP = 10.0
 
-opt_conv_str_0 = py_blockSQP_old.SQPoptions()
-opt_conv_str_0.maxTimeQP = 10.0
-opt_conv_str_0.maxConvQP = 4
+opt_conv_comb_4 = py_blockSQP_old.SQPoptions()
+opt_conv_comb_4.maxTimeQP = 10.0
+opt_conv_comb_4.maxConvQP = 4
 
 
 Experiments = [
-               (opt_SR1_BFGS, "SR1-BFGS"),
-               (opt_conv_str_0, "conv. str. 0"),
+                (opt_SR1_BFGS, "SR1-BFGS"),
+                (opt_conv_comb_4, "blockSQP (convex combinations)"),
                ]
 
 
 file_output = True
-plot_folder = cD / Path("out_old_blockSQP_experiments_RK4")
-integrator = 'RK4'
-
+plot_folder = cD / Path("out_old_blockSQP_experiments")
 
 nPert0 = 0
-nPertF = 40
+nPertF = 10
 dirPath = plot_folder
 dirPath.mkdir(parents = True, exist_ok = True)
 if file_output:
@@ -64,10 +85,11 @@ if file_output:
 else:
     out = OCP_experiment_old.out_dummy()
 titles = [EXP_name for _, EXP_name in Experiments]
-OCP_experiment_old.print_heading(out, titles)
 
-for OCclass in Examples:    
-    OCprob = OCclass(nt = 100, integrator = integrator, parallel = True)
+namejust = OCP_experiment_old.max_example_name_length(Examples) + 2
+OCP_experiment_old.print_heading(out, titles, namejust = namejust)
+for OCclass, OCargs, OCname in Examples:    
+    OCprob = OCclass(nt = 100, parallel = True, **OCargs)
     itMax = 200
     titles = []
     EXP_N_SQP = []
@@ -82,8 +104,12 @@ for OCclass in Examples:
         titles.append(EXP_name)
         n_EXP += 1
     ###############################################################################
+    if OCname is None:
+        OCname = OCclass.__name__
+    
     OCP_experiment_old.plot_successful(n_EXP, nPert0, nPertF,\
         titles, EXP_N_SQP, EXP_N_secs, EXP_type_sol,\
-        suptitle = OCclass.__name__, dirPath = dirPath, savePrefix = "blockSQP")
+        suptitle = OCname, dirPath = dirPath, savePrefix = "blockSQP")
     OCP_experiment_old.print_iterations(out, OCclass.__name__, EXP_N_SQP, EXP_N_secs, EXP_type_sol)
 out.close()
+

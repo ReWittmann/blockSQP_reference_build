@@ -1,5 +1,5 @@
 # blockSQP_reference_build - build system and Python interface for blockSQP
-# Copyright (C) 2025 by Reinhold Wittmann <reinhold.wittmann@ovgu.de>
+# Copyright (C) 2025-2026 by Reinhold Wittmann <reinhold.wittmann@ovgu.de>
 # Licensed under the zlib license. See LICENSE for more details.
 
 
@@ -11,6 +11,7 @@ import datetime
 import matplotlib.pyplot as plt
 plt.rcParams["text.usetex"] = True
 from pathlib import Path
+import typing
 
 
 def create_prob_old(OCprob : OCProblems.OCProblem):    
@@ -58,7 +59,7 @@ def perturbed_starts(OCprob : OCProblems.OCProblem, opts : py_blockSQP_old.SQPop
     return N_SQP, N_secs, type_sol
 
 
-def plot_successful(n_EXP, nPert0, nPertF, titles, EXP_N_SQP, EXP_N_secs, EXP_type_sol, suptitle = None, dirPath = None, savePrefix = None):
+def plot_successful(n_EXP, nPert0, nPertF, titles, EXP_N_SQP, EXP_N_secs, EXP_type_sol, suptitle = None, dirPath : Path = None, savePrefix = None):
     if isinstance(dirPath, str):
         print("\n\nWARNING: Passing a pathstring to plot_successful is not recommended, use pathlib.Path instead\n", flush = True)
         dirPath = Path(dirPath)
@@ -113,39 +114,54 @@ def plot_successful(n_EXP, nPert0, nPertF, titles, EXP_N_SQP, EXP_N_secs, EXP_ty
         
         subfigs[i].suptitle(titles[i], size = titlesize)
     if not isinstance(dirPath, Path):
-        plt.show()
+        # plt.show()
+        pass
     else:
         dirPath.mkdir(parents = True, exist_ok = True)
         date_app = str(datetime.datetime.now()).replace(" ", "_").replace(":", "_").replace(".", "_").replace("'", "")
         name_app = "" if suptitle is None else suptitle.replace(" ", "_").replace(":", "_").replace(".", "_").replace("'", "")        
         pref = "" if savePrefix is None else savePrefix
         plt.savefig(dirPath / Path(pref + "_it_s_" + name_app + "_" + date_app))
+    plt.close()
 
+def max_example_name_length(Examples : list[tuple[type[OCProblems.OCProblem], dict, typing.Optional[str]]]):
+    max_name_length = 1
+    for OCclass, _, OCname in Examples:
+        if OCname is None:
+            OCname = OCclass.__name__
+        max_name_length = max(max_name_length, len(OCname))
+    return max_name_length
 
-def print_heading(out, EXP_names : list[str]):
-    out.write(" "*27)
+def print_heading(out, EXP_names : list[str], namejust = 30, mujust = 10, sigmajust = 11, midjust = 5):
+    """Prepare new file for later calling print_iterations on out"""
+    out.write(" "*namejust)
     for EXP_name in EXP_names:
-        out.write(EXP_name[0:40].ljust(21 + 5 + 21))
-    out.write("\n" + " "*27)
+        out.write(EXP_name[0:40].ljust(mujust+sigmajust+midjust+mujust+sigmajust))
+    out.write("\n" + " "*namejust)
     for i in range(len(EXP_names)):
-        out.write("mu_N".ljust(10) + "sigma_N".ljust(11) + "mu_t".ljust(10) + "sigma_t".ljust(11))
+        out.write("mu_N".ljust(mujust) + "sigma_N".ljust(sigmajust) + "mu_t".ljust(mujust) + "sigma_t".ljust(sigmajust))
         if i < len(EXP_names) - 1:
-            out.write("|".ljust(5))
+            out.write("|".ljust(midjust))
     out.write("\n")
     
-def print_iterations(out, name, EXP_N_SQP, EXP_N_secs, EXP_type_sol):
+def print_iterations(out, name, EXP_N_SQP, EXP_N_secs, EXP_type_sol, namejust = 30, mujust = 10, sigmajust = 11, midjust = 5):
+    """Print iteration count and solution time - averages and 
+    standard deviations to file, EXP_... being vectors returned by
+    the perburbed_starts functions.
+    """
     n_EXP = len(EXP_N_SQP)
     EXP_N_SQP_mu = [sum(EXP_N_SQP[i])/len(EXP_N_SQP[i]) for i in range(n_EXP)]
     EXP_N_SQP_sigma = [(sum((np.array(EXP_N_SQP[i]) - EXP_N_SQP_mu[i])**2)/len(EXP_N_SQP[i]))**(0.5) for i in range(n_EXP)]
     EXP_N_secs_mu = [sum(EXP_N_secs[i])/len(EXP_N_secs[i]) for i in range(n_EXP)]
     EXP_N_secs_sigma = [(sum((np.array(EXP_N_secs[i]) - EXP_N_secs_mu[i])**2)/len(EXP_N_secs[i]))**(0.5) for i in range(n_EXP)]
     
-    out.write(name[:25].ljust(27))
+    out.write(name[:namejust-2].ljust(namejust))
     for i in range(n_EXP):
-        out.write((f"{EXP_N_SQP_mu[i]:.2f}" + ",").ljust(10) + (f"{EXP_N_SQP_sigma[i]:.2f}" + ";").ljust(11) + (f"{EXP_N_secs_mu[i]:.2f}" + "s,").ljust(10) + (f"{EXP_N_secs_sigma[i]:.2f}" + "s").ljust(11))
+        out.write((f"{EXP_N_SQP_mu[i]:.2f}" + ",").ljust(mujust) + (f"{EXP_N_SQP_sigma[i]:.2f}" + ";").ljust(sigmajust) + (f"{EXP_N_secs_mu[i]:.2f}" + "s,").ljust(mujust) + (f"{EXP_N_secs_sigma[i]:.2f}" + "s").ljust(sigmajust))
         if i < n_EXP - 1:
-            out.write("|".ljust(5))
+            out.write("|".ljust(midjust))
     out.write("\n")
+    
     
 
 class out_dummy:
@@ -156,7 +172,7 @@ class out_dummy:
     def close(self):
         pass
 
-def run_blockSQP_experiments(Examples : list[type], Experiments : list[tuple[py_blockSQP_old.SQPoptions, str]], dirPath : str, nPert0 = 0, nPertF = 40, print_output = True, **kwargs):
+def run_blockSQP_experiments(Examples : list[type], Experiments : list[tuple[py_blockSQP_old.SQPoptions, str]], dirPath : str, nPert0 = 0, nPertF = 40, print_output = True, parallel = True, **kwargs):
     if isinstance(dirPath, str):
         print("\n\nWARNING: Passing a pathstring to run_blockSQP_experiments is not recommended, use pathlib.Path instead\n", flush = True)
         dirPath = Path(dirPath)
@@ -172,7 +188,7 @@ def run_blockSQP_experiments(Examples : list[type], Experiments : list[tuple[py_
     print_heading(out, titles)
     
     for OCclass in Examples:        
-        OCprob = OCclass(**kwargs)
+        OCprob = OCclass(parallel = True, **kwargs)
         itMax = 200
         titles = []
         EXP_N_SQP = []

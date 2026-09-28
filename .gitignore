@@ -2,3 +2,5 @@
 *.so
 __pycache__
 out_old_blockSQP_experiments_RK4
+*.png
+blockSQP_it_*
